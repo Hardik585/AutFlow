@@ -1,0 +1,87 @@
+
+# ========================================
+# Root-level .gitignore
+# Covers both frontend and backend
+# ========================================
+
+### OS ###
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### Logs ###
+*.log
+
+### Archives ###
+*.zip
+*.tar.gz
+*.rar
+
+### Temp files ###
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+*.rej
+
+# ========================================
+# FRONTEND (React, Angular, Vue, etc.)
+# ========================================
+
+
+# ========================================
+# BACKEND (Spring Boot project inside backend/my-sts-project)
+# ========================================
+
+# Build and output directories
+backend/target/
+backend/build/
+backend/bin/
+backend/out/
+
+# Maven/Gradle
+backend/.mvn/
+backend/.gradle/
+backend/mvnw
+backend/mvnw.cmd
+backend/gradlew
+backend/gradlew.bat
+
+# Eclipse/STS
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.factorypath
+backend/.springBeans
+backend/.apt_generated/
+backend/.metadata/
+backend/.recommenders/
+backend/*.launch
+
+# Environment/config
+backend/.env
+backend/application-*.yml
+backend/application-*.properties
+
+# Optional: hide production config files
+backend/src/main/resources/application-prod.yml
+backend/src/main/resources/application-prod.properties
+
+# ========================================
+# IDE-specific
+# ========================================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+/.metadata/
+
+
+demo.json
