@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.authflow.dto.ProfileRequestDTO;
 import com.authflow.dto.ProfileResponseDTO;
 import com.authflow.entity.UserEntity;
+import com.authflow.exception.EmailAlreadyExist;
 import com.authflow.mapper.UserMapper;
 import com.authflow.repo.UserRepo;
 
@@ -19,6 +20,9 @@ public class ProfileServiceImp implements ProfileService {
 
 	@Override
 	public ProfileResponseDTO createProfile(ProfileRequestDTO reqDTO) {
+		if (repo.existsByEmail(reqDTO.getEmail())) {
+			throw new EmailAlreadyExist("Emial is Already Exist or in used ");
+		}
 		UserEntity entity = UserMapper.toEntity(reqDTO);
 		UserEntity savedUser = repo.save(entity);
 		ProfileResponseDTO responseDTO = UserMapper.toResponseDTO(savedUser);

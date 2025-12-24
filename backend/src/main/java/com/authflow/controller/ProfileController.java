@@ -11,6 +11,8 @@ import com.authflow.dto.ProfileRequestDTO;
 import com.authflow.dto.ProfileResponseDTO;
 import com.authflow.service.ProfileServiceImp;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1.0")
 public class ProfileController {
@@ -22,8 +24,9 @@ public class ProfileController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<ProfileResponseDTO> register(@RequestBody ProfileRequestDTO request){
+	public ResponseEntity<ProfileResponseDTO> register(@Valid @RequestBody ProfileRequestDTO request){
 		ProfileResponseDTO profile = service.createProfile(request);
+//		TODO send welcome to email 
 		return new ResponseEntity<>(profile , HttpStatus.CREATED);
 	}
 }
