@@ -1,5 +1,11 @@
 package com.authflow.entity;
 
+import java.security.Timestamp;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Auth_User")
+@Table(name="auth_user")
 @Builder
 @Data
 @AllArgsConstructor
@@ -22,6 +28,8 @@ public class UserEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(unique = true)
+	private String userId;
 	private String name;
 	@Column(unique = true)
 	private String email;
@@ -32,6 +40,13 @@ public class UserEntity {
 	private Long verifyOtpExpireAt;
 	private String resetOtp;
 	private Long resetOtpExpireAt;
+	
+	@CreationTimestamp
+	@Column(updatable = false)
+	private LocalDateTime createdAt;
+	
+	@UpdateTimestamp
+	private LocalDateTime updateAt;
 	
 	
 }
