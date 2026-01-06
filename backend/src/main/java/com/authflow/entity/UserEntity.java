@@ -1,6 +1,6 @@
 package com.authflow.entity;
 
-import java.security.Timestamp;
+
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;

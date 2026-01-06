@@ -6,14 +6,15 @@ import com.authflow.dto.ProfileRequestDTO;
 import com.authflow.dto.ProfileResponseDTO;
 import com.authflow.entity.UserEntity;
 
-public class UserMapper {
 
-	public static UserEntity toEntity(ProfileRequestDTO request) {
+public class UserMapper {
+	
+	public static UserEntity toEntity(ProfileRequestDTO request , String encodedPswd) {
 		return UserEntity.builder()
 				         .userId(UUID.randomUUID().toString())
 				         .name(request.getName())
 				         .email(request.getEmail())
-				         .password(request.getPassword())
+				         .password(encodedPswd)
 				         .verifyOtp(null)
 				         .verifyOtpExpireAt(0L)
 				         .isAccountVerified(false)
