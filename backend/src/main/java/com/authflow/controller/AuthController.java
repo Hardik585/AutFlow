@@ -39,6 +39,7 @@ public class AuthController {
 //			 TODO JWT token generation part 
 			final UserDetails userDetails = appUserDetailsService.loadUserByUsername(request.getEmail());
 			final String token = jwtUtil.generateToken(userDetails);
+			//Cookies work (this is how the test url getting jwt in the form of cookies )
 			ResponseCookie cookie = ResponseCookie.from("jwt", token)
 					                              .httpOnly(true)
 					                              .path("/")

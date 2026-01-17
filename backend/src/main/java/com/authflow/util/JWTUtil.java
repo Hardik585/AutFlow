@@ -38,7 +38,7 @@ public class JWTUtil {
 	private Claims extractAllClaims(String token) {
 		return Jwts.parser()
 				   .setSigningKey(SECRET_KEY)
-				   .parseClaimsJwt(token)
+				   .parseClaimsJws(token)  //parseJwt() used for unsigned Token and parseJws() is used for signed token 
 				   .getBody();
 	}
 	

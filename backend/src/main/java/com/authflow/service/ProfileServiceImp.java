@@ -1,5 +1,8 @@
 package com.authflow.service;
 
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +22,13 @@ public class ProfileServiceImp implements ProfileService {
 	private final UserRepo repo;
 	private final PasswordEncoder pswdEncoder;
 
-//	public ProfileServiceImp(UserRepo repo) {
-//		this.repo = repo;
-//	}	
+	
+	@Override
+	public ProfileResponseDTO getProfile(String email) {
+		UserEntity existingUser = repo.findByEmail(email)
+				                      .orElseThrow(()-> new UsernameNotFoundException("user does not exist"+ email));
+		return UserMapper.toResponseDTO(existingUser);
+	}
 
 	@Override
 	public ProfileResponseDTO createProfile(ProfileRequestDTO reqDTO) {
