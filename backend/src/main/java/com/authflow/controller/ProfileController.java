@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.authflow.dto.ProfileRequestDTO;
 import com.authflow.dto.ProfileResponseDTO;
+import com.authflow.service.EmailService;
 import com.authflow.service.ProfileServiceImp;
+
 
 import jakarta.validation.Valid;
 
@@ -18,30 +20,31 @@ import jakarta.validation.Valid;
 public class ProfileController {
 
 	private final ProfileServiceImp service;
-	
-	public ProfileController(ProfileServiceImp service) {
+	private final EmailService emailService;
+
+	public ProfileController(ProfileServiceImp service, EmailService emailService) {
 		this.service = service;
+		this.emailService = emailService;
 	}
-	
-	
+
 	@PostMapping("/register")
-	public ResponseEntity<ProfileResponseDTO> register(@Valid @RequestBody ProfileRequestDTO request){
+	public ResponseEntity<ProfileResponseDTO> register(@Valid @RequestBody ProfileRequestDTO request) {
 		ProfileResponseDTO profile = service.createProfile(request);
-//		TODO send welcome to email 
-		return new ResponseEntity<>(profile , HttpStatus.CREATED);
+//		 Send welcome to email 
+		emailService.sendWelcome(profile.getEmail(), profile.getName());
+		return new ResponseEntity<>(profile, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/profile")
-	public ProfileResponseDTO getProfile(@CurrentSecurityContext(expression ="authentication?.name") String email) {
+	public ProfileResponseDTO getProfile(@CurrentSecurityContext(expression = "authentication?.name") String email) {
 		return service.getProfile(email);
 	}
-	
+
 	/*
 	 * Above method can be write like this also easy for debug and log maintainable
 	 * 
-	 * @GetMapping("/getprofile")
-	 *  public ProfileResponseDTO getProfileTwo(Authentication auth) { 
-	 *   return service.getProfile(auth.getName()); 
-	 *  }
+	 * @GetMapping("/getprofile") public ProfileResponseDTO
+	 * getProfileTwo(Authentication auth) { return
+	 * service.getProfile(auth.getName()); }
 	 */
 }

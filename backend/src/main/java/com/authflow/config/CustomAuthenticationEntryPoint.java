@@ -24,4 +24,4 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 
 }
 	
-//TODO this class is not necessary according to AI 
+// This class is not necessary according to AI 

@@ -10,6 +10,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,13 +38,14 @@ public class SeurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		http.authorizeHttpRequests(
-				auth -> auth.requestMatchers("/login", "/register", "/send-reset-otp", "/reset-password", "/logout", "/greet")
+				auth -> auth.requestMatchers("/login", "/register", "/send-reset-otp","/verify-otp", "/reset-password", "/logout", "/greet")
 						.permitAll()
 						.anyRequest()
 						.authenticated())
 				.csrf(csrf -> csrf.disable())
 				.cors(Customizer.withDefaults())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.logout(AbstractHttpConfigurer::disable)  //default logout disabled 
 				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 				.exceptionHandling(ex-> ex.authenticationEntryPoint(customAuthenticationEntryPoint));
 		return http.build();
