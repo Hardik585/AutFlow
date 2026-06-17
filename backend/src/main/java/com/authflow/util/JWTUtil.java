@@ -1,10 +1,13 @@
 package com.authflow.util;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,53 +18,58 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JWTUtil {
-	
-	@Value("${jwt.secret.key}")
-	private String SECRET_KEY;
 
-	public String generateToken(UserDetails userDetails) {
-	      Map<String, Object> claims = new HashMap<>();
-	      String token = createToken(claims , userDetails.getUsername());  //here userName() give/verify the email presence
-		return token;
-	}
+    @Value("${jwt.secret.key}")
+    private String SECRET_KEY;
 
-	private String createToken(Map<String, Object> claims, String email) {
-		return Jwts.builder()
-		    .setClaims(claims)
-		    .setSubject(email)
-		    .setIssuedAt(new Date(System.currentTimeMillis()))
-		    .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
-		    .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-            .compact();	
-	}
-	
-	private Claims extractAllClaims(String token) {
-		return Jwts.parser()
-				   .setSigningKey(SECRET_KEY)
-				   .parseClaimsJws(token)  //parseJwt() used for unsigned Token and parseJws() is used for signed token 
-				   .getBody();
-	}
-	
-	public <T> T extractClaim(String token, Function<Claims , T> claimsResolver) {
-		 final Claims claims = extractAllClaims(token);
-		 return claimsResolver.apply(claims);
-	}
-	
-	public String extractEmail(String token) {
-		return extractClaim(token, Claims::getSubject);
-	}
-	
-	public Date extractExpiration(String token) {
-		return extractClaim(token, Claims::getExpiration);
-	}
-	
-	private Boolean isTokenExpired(String token) {
-		return extractExpiration(token).before(new Date());
-	}
-	
-	public Boolean validateToken(String token, UserDetails userDetails) {
-		final String email = extractEmail(token);
-		return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
-	}
-	
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        String token = createToken(claims, userDetails.getUsername());  //here userName() give/verify the email presence
+        return token;
+    }
+
+    private String createToken(Map<String, Object> claims, String email) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)  //parseJwt() used for unsigned Token and parseJws() is used for signed token
+                .getBody();
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    public String extractEmail(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
 }

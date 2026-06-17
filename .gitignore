@@ -3,7 +3,7 @@
 # Root-level .gitignore
 # Covers both frontend and backend
 # ========================================
-
+.env
 ### OS ###
 .DS_Store
 Thumbs.db
