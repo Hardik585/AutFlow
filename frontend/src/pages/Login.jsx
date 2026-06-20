@@ -19,7 +19,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const { backendURL , setIsLoggedIn , getUserData } = useContext(AppContext);
+    const { backendURL, setIsLoggedIn, getUserData } = useContext(AppContext);
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
@@ -43,7 +43,11 @@ const Login = () => {
                     email, password
                 });
                 if (response.status === 200) {
-                      setIsLoggedIn(true);
+                    localStorage.setItem(
+                        "token",
+                        response.data.token
+                    );
+                    setIsLoggedIn(true);
                     toast.success("Login Successful");
                     getUserData();
                     navigate("/");
@@ -52,7 +56,7 @@ const Login = () => {
                 }
             }
         } catch (error) {
-            toast.error(error.response.data.message || "Something went wrong!");
+            toast.error(error?.response?.data?.message || error.message || "Something went wrong!");
             setLoading(false);
         } finally {
             setLoading(false);

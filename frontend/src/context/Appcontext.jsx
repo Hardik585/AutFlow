@@ -17,19 +17,41 @@ export const AppContextProvider = (props) => {
 
    
 
+    // const getUserData = async () => {
+    //     try {
+    //         const response = await axios.get(backendURL + "/profile");
+    //         if (response.status === 200) {
+    //             setUserData(response.data);
+    //         } else {
+    //             toast.error("Failed to fetch user data");
+    //         }
+    //     } catch (error) {
+    //         toast.error("Something went wrong while fetching user data" + error.message);
+    //     }
+
+    // }
+
     const getUserData = async () => {
-        try {
-            const response = await axios.get(backendURL + "/profile");
-            if (response.status === 200) {
-                setUserData(response.data);
-            } else {
-                toast.error("Failed to fetch user data");
+    try {
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(backendURL + "/profile", {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
-        } catch (error) {
-            toast.error("Something went wrong while fetching user data" + error.message);
+        });
+
+        if (response.status === 200) {
+            setUserData(response.data);
+        } else {
+            toast.error("Failed to fetch user data");
         }
 
+    } catch (error) {
+        toast.error("Something went wrong while fetching user data " + error.message);
     }
+};
+
     const contextValue = {
         backendURL,
         isLoggedIn, setIsLoggedIn,
