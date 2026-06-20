@@ -32,10 +32,8 @@ frontend/node_modules/
 frontend/dist/
 frontend/package-lock.json
 frontend/yarn.lock
-frontend/.env
 frontend/.env.local
 frontend/.env.development
-frontend/.env.production
 
 # ========================================
 # BACKEND (Spring Boot project inside backend/my-sts-project)
