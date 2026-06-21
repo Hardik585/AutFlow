@@ -9,11 +9,11 @@ import { X, Menu } from 'lucide-react';
 import { AppContextProvider } from './context/Appcontext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
       <AppContextProvider>
         <App />
       </AppContextProvider>
     </BrowserRouter>
-  </StrictMode>,
+  // </StrictMode>,
 )

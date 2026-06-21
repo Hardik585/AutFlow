@@ -8,29 +8,9 @@ import { toast } from "react-toastify";
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
-
-    // axios.defaults.withCredentials = true;
-
     const backendURL = AppConstants.API_BASE_URL;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setUserData] = useState(false);
-
-   
-
-    // const getUserData = async () => {
-    //     try {
-    //         const response = await axios.get(backendURL + "/profile");
-    //         if (response.status === 200) {
-    //             setUserData(response.data);
-    //         } else {
-    //             toast.error("Failed to fetch user data");
-    //         }
-    //     } catch (error) {
-    //         toast.error("Something went wrong while fetching user data" + error.message);
-    //     }
-
-    // }
-
     const getUserData = async () => {
     try {
         const token = localStorage.getItem("token");

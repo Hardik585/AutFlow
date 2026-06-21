@@ -24,8 +24,6 @@ const Login = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         axios.defaults.withCredentials = true;
-        console.log("backend : " + backendURL);
-        console.log(import.meta.env.VITE_API_URL);
         setLoading(true);
         try {
             if (isCreateAccount) {
